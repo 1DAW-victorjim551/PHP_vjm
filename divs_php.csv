@@ -1,24 +1,12 @@
-"<div class=""tile fuego""></div>"
-"<div class=""tile fuego""></div>"
-"<div class=""tile agua""></div>"
-"<div class=""tile fuego""></div>"
-"<div class=""tile fuego""></div>"
-"<div class=""tile tierra""></div>"
-"<div class=""tile fuego""></div>"
-"<div class=""tile fuego""></div>"
-"<div class=""tile agua""></div>"
-"<div class=""tile fuego""></div>"
-"<div class=""tile fuego""></div>"
-"<div class=""tile tierra""></div>"
-"<div class=""tile fuego""></div>"
-"<div class=""tile fuego""></div>"
-"<div class=""tile agua""></div>"
-"<div class=""tile fuego""></div>"
-"<div class=""tile fuego""></div>"
-"<div class=""tile tierra""></div>"
-"<div class=""tile fuego""></div>"
-"<div class=""tile fuego""></div>"
-"<div class=""tile agua""></div>"
-"<div class=""tile fuego""></div>"
-"<div class=""tile fuego""></div>"
-"<div class=""tile tierra""></div>';"
+agua,hierba,fuego,tierra,hierba,agua,fuego,tierra,hierba,fuego,agua,tierra
+tierra,fuego,hierba,agua,fuego,tierra,hierba,agua,fuego,tierra,hierba,agua
+hierba,agua,tierra,fuego,agua,hierba,tierra,fuego,agua,hierba,tierra,fuego
+fuego,tierra,agua,hierba,fuego,tierra,agua,hierba,fuego,tierra,agua,hierba
+agua,fuego,tierra,hierba,agua,fuego,tierra,hierba,agua,fuego,tierra,hierba
+tierra,hierba,agua,fuego,tierra,hierba,agua,fuego,tierra,hierba,agua,fuego
+hierba,tierra,fuego,agua,hierba,tierra,fuego,agua,hierba,tierra,fuego,agua
+fuego,hierba,tierra,agua,fuego,hierba,tierra,agua,fuego,hierba,tierra,agua
+agua,tierra,hierba,fuego,agua,tierra,hierba,fuego,agua,tierra,hierba,fuego
+tierra,agua,fuego,hierba,tierra,agua,fuego,hierba,tierra,agua,fuego,hierba
+hierba,fuego,agua,tierra,hierba,fuego,agua,tierra,hierba,fuego,agua,tierra
+fuego,agua,hierba,tierra,fuego,agua,hierba,tierra,fuego,agua,hierba,tierra

@@ -20,10 +20,6 @@ function getBoard($arrayImagenes, $output, $indice){
             }
             $output .= "<td>$arrayImagenes[$indice]</td>";
             $indice++;
-             //$output .= "<td>hola</td>";
-             //$output .= "<td>";
-             //$output .= "<p>Hola</p>";
-             //$output .= "</td>";
         }
         $output .= "</tr>";
     }
