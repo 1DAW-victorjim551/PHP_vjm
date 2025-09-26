@@ -19,7 +19,7 @@ function getTableroMArkup ($tablero, $arrayRana){
     foreach ($tablero as $filaIndex => $datosFila) {
         foreach ($datosFila as $columnaIndex => $tileType) {
             $cont++;
-
+            
             if (isset($arrayRana[$cont])) {
                 $output .= '<div class="tile ' . $tileType . '">' . $arrayRana[$cont] . '</div>';
             } else {
@@ -39,12 +39,22 @@ function getTableroMArkup ($tablero, $arrayRana){
 // hierba
 
 function generarPersonaje(){
-    $random =  rand(0, 143);
+    $fila = $_GET['fila'];
+    $columna = $_GET['columna'];
+    $random = ($fila) * ($columna);
     $rana = '<img src="./media/froggit.webp" style="width:20px;height:20px;display:inline-block">';
     $arrayRana = array(
         $random => $rana
     );
+
+    if(!isset($fila) || !isset($columna)){
+        $arrayRana = null;
+    }
+
     return $arrayRana;
+
+    
+    
 }
 function leerArchivoCSV($archivoCSV) {
     $tablero = [];
