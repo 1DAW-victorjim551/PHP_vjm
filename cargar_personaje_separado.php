@@ -34,28 +34,24 @@ function getTableroMArkup ($tablero, $arrayRana){
 //Lógica de negocio
 //El tablero es un array bidimensional en el que cada fila contiene 12 palabras cuyos valores pueden ser:
 // agua
-//fuego
-//tierra
+// fuego
+// tierra
 // hierba
 
 function generarPersonaje(){
-    $fila = $_GET['fila'];
-    $columna = $_GET['columna'];
-    $random = ($fila) * ($columna);
+    // <-- MODIFICACIÓN: accedemos a $_GET solo si existe, usando null coalescing
+    $fila = $_GET['fila'] ?? 0;
+    $columna = $_GET['columna'] ?? 0;
+
+    $random = $fila * $columna;
     $rana = '<img src="./media/froggit.webp" style="width:20px;height:20px;display:inline-block">';
     $arrayRana = array(
         $random => $rana
     );
 
-    if(!isset($fila) || !isset($columna)){
-        $arrayRana = null;
-    }
-
     return $arrayRana;
-
-    
-    
 }
+
 function leerArchivoCSV($archivoCSV) {
     $tablero = [];
 
