@@ -46,10 +46,10 @@ function leerArchivoCSV($rutaArchivoCSV) {
 }
 function leerInput(){
     
-    $col = filter_input(INPUT_GET, 'col', FILTER_VALIDATE_INT);
-    $row = filter_input(INPUT_GET, 'row', FILTER_VALIDATE_INT);
-    $fila = $_GET['fila'] ?? 0;
-    $columna = $_GET['columna'] ?? 0;
+    $col = filter_input(INPUT_GET, 'col', FILTER_VALIDATE_INT)?:"Error, parámetro no válido";
+    $row = filter_input(INPUT_GET, 'row', FILTER_VALIDATE_INT)?:"Error, parámetro no válido";
+    $row = $_GET['row'] ?? 0;
+    $col = $_GET['col'] ?? 0;
     return array('col' => $col,
       'row' => $row
 );
@@ -73,6 +73,8 @@ $tablero = leerArchivoCSV('./data/tablero1.csv');
 
 //*****+++Lógica de presentación*******
 $tableroMarkup = getTableroMarkup($tablero, $posPersonaje);
+$columna = $col;
+$fila = $row;
 
 
 ?>
@@ -126,6 +128,8 @@ $tableroMarkup = getTableroMarkup($tablero, $posPersonaje);
     </style>
 </head>
 <body>
+    <?php echo $columna; ?>
+    <?php echo $fila; ?>
     <h1>Tablero juego super rol DWES</h1>
     <div class="contenedorTablero">
         <?php echo $tableroMarkup; ?>
