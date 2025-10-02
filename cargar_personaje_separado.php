@@ -38,10 +38,13 @@ function getTableroMArkup ($tablero, $arrayRana){
 // tierra
 // hierba
 
+
+
+$fila = $_GET['fila'] ?? 0;
+$columna = $_GET['columna'] ?? 0;
+$boton = "";
 function generarPersonaje(){
     // <-- MODIFICACIÓN: accedemos a $_GET solo si existe, usando null coalescing
-    $fila = $_GET['fila'] ?? 0;
-    $columna = $_GET['columna'] ?? 0;
 
     $random = $fila * $columna;
     $rana = '<img src="./media/froggit.webp" style="width:20px;height:20px;display:inline-block">';
@@ -50,6 +53,26 @@ function generarPersonaje(){
     );
 
     return $arrayRana;
+}
+
+function moverPersonaje(){
+    switch($boton){
+        case 'izquierda':
+            $fila--;
+        break;
+
+        case 'derecha':
+            $fila++;
+            break;
+        
+        case 'arriba':
+            $columna++;
+            break;
+
+        case 'abajo':
+            $columna--;
+            break;
+    }
 }
 
 function leerArchivoCSV($archivoCSV) {
