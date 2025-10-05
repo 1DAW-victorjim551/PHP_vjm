@@ -1,196 +1,136 @@
 <?php
 
-/***** Inicialización del entorno ******/
+/* Inicialización del entorno */
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-
-/* Zona de declaración de funciones */
-//*******Funciones de debugueo****
+/* Funciones de debug */
 function dump($var){
     echo '<pre>'.print_r($var,1).'</pre>';
 }
 
-//*******Función lógica presentación**********+
-function getTableroMarkup ($tablero, $posPersonaje){
+/* Función para pintar el tablero con la rana */
+function getTableroMArkup($tablero, $arrayRana){
     $output = '';
+    $cont = 0;
+
     foreach ($tablero as $filaIndex => $datosFila) {
         foreach ($datosFila as $columnaIndex => $tileType) {
-            if(isset($posPersonaje)&&($filaIndex == $posPersonaje['row'])&&($columnaIndex == $posPersonaje['col'])){
-                $output .= '<div class = "tile ' . $tileType . '"><img src="./src/super_musculitos.png"></div>';    
-            }else{
-                $output .= '<div class = "tile ' . $tileType . '"></div>';
+            $cont++;
+            
+            if (isset($arrayRana[$cont])) {
+                $output .= '<div class="tile ' . $tileType . '">' . $arrayRana[$cont] . '</div>';
+            } else {
+                $output .= '<div class="tile ' . $tileType . '"></div>';
             }
         }
     }
+
     return $output;
 }
-//******+Función Lógica de negocio************
-//El tablero es un array bidimensional en el que cada fila contiene 12 palabras cuyos valores pueden ser:
-// agua
-//fuego
-//tierra
-// hierba
-function leerArchivoCSV($rutaArchivoCSV) {
-    $tablero = [];
 
-    if (($puntero = fopen($rutaArchivoCSV, "r")) !== FALSE) {
-        while (($datosFila = fgetcsv($puntero)) !== FALSE) {
-            $tablero[] = $datosFila;
+/* Función que generas tus cuentas de rana */
+function generarPersonaje(){
+    global $fila, $columna;
+    $random = $fila * $columna; // <-- tus cuentas originales
+    $rana = '<img src="./media/froggit.webp" style="width:20px;height:20px;display:inline-block">';
+    return [$random => $rana];
+}
+
+/* Función para generar los botones */
+function botonesMarkup($fila, $columna){
+    $boton = array(
+        "izquierda" => array($fila, $columna - 1),
+        "derecha"   => array($fila, $columna + 1),
+        "arriba"    => array($fila - 1, $columna),
+        "abajo"     => array($fila + 1, $columna)
+    );
+
+    $markup = '<div class="botones">';
+    foreach ($boton as $dir => $pos) {
+        list($f, $c) = $pos;
+        $markup .= '<a href="./index.php?fila='.$f.'&columna='.$c.'">'.$dir.'</a> ';
+    }
+    $markup .= '</div>';
+
+    return $markup;
+}
+
+/* Función para leer el CSV del tablero */
+function leerArchivoCSV($archivoCSV){
+    $tablero = [];
+    if (($puntero = fopen($archivoCSV, "r")) !== FALSE) {
+        while (($filaCSV = fgetcsv($puntero)) !== FALSE) {
+            $tablero[] = $filaCSV;
         }
         fclose($puntero);
     }
-
     return $tablero;
 }
 
-$col="";
-$row="";
-function leerInput(){
-    
-    $col = filter_input(INPUT_GET, 'col', FILTER_VALIDATE_INT)?:"Error, parámetro no válido";
-    $row = filter_input(INPUT_GET, 'row', FILTER_VALIDATE_INT)?:"Error, parámetro no válido";
-    // $row = $_GET['row'] ?? 0;
-    // $col = $_GET['col'] ?? 0;
-    return array('col' => $col,
-      'row' => $row
-);
-    
-//    return (isset($col) && isset($row))? array(
-//            'row' => $row,
-//            'col' => $col
-//        ) : null;    
-}
-//*****Lógica de negocio***********
-//Extracción de las variables de la petición
-$boton = $_GET["boton"];
+/* Valores de fila y columna desde GET */
+$fila = $_GET['fila'] ?? 0;
+$columna = $_GET['columna'] ?? 0;
 
+/* Lectura del tablero */
+$tablero = leerArchivoCSV('media/divs_php.csv');
 
-function moverPersonaje($boton, $posPersonaje){
+/* Generación de la rana */
+$arrayRana = generarPersonaje();
 
-    $col = $posPersonaje['col'];
-    $row = $posPersonaje['row'];
-    switch($boton){
-        case 'izquierda':
-            $row--;
-        break;
+/* Generación de botones */
+$botones = botonesMarkup($fila, $columna);
 
-        case 'derecha':
-            $row++;
-            break;
-        
-        case 'arriba':
-            $col++;
-            break;
-
-        case 'abajo':
-            $col--;
-            break;
-    }
-
-    return array(
-        'col' => $col,
-        'row' => $row
-    );
-}
-
-$posPersonaje = leerInput();
-
-if (isset($_GET['boton'])) {
-    $boton = $_GET['boton'];
-    $posPersonaje = moverPersonaje($boton, $posPersonaje);
-}
-
-
-dump('$posPersonaje');
-dump($posPersonaje);
-$tablero = leerArchivoCSV('./data/tablero1.csv');
-
-
-
-//*****+++Lógica de presentación*******
-$tableroMarkup = getTableroMarkup($tablero, $posPersonaje);
-
-$columna = $col;
-$fila = $row;
-
-
+/* Generación del markup del tablero */
+$tableroMarkup = getTableroMArkup($tablero, $arrayRana);
 
 ?>
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Minified version -->
-    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
-    <title>Document</title>
-    <style>
-        .contenedorTablero {
-            width:600px;
-            height:600px;
-            border: solid 2px grey;
-            box-shadow: grey;
-            display:grid;
-            grid-template-columns: repeat(12, 1fr);
-            grid-template-rows: repeat(12, 1fr);
-        }
-        .tile {
-            float: left;
-            margin: 0;
-            padding: 0;
-            border-width: 0;
-            background-image: url("./src/464.jpg");
-            background-size: 209px;
-            background-repeat: none;
-            overflow: hidden;
-        }
-        .tile img{
-            max-width:100%;
-        }
-        .fuego {
-            background-color: red;
-            background-position: -105px -52px;
-        }
-        .tierra {
-            background-color: brown;
-            background-position: -157px 0px;
-        }
-        .agua {
-            background-color: blue;
-            background-position: -53px 0px;
-        }
-        .hierba {
-            background-color: green;
-            background-position: 0px 0px;
-        }
-    </style>
+<meta charset="UTF-8">
+<title>Tablero Juego Super Rol DWES</title>
+<style>
+    .contenedorTablero {
+        width: 600px;
+        height: 600px;
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        grid-template-rows: repeat(12, 1fr);
+        border: 2px solid grey;
+    }
+    .tile {
+        width: 50px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #ccc;
+    }
+    .fuego { background-color: red; }
+    .tierra { background-color: brown; }
+    .agua { background-color: blue; }
+    .hierba { background-color: green; }
+    .botones a {
+        margin: 5px;
+        padding: 5px 10px;
+        background: #ccc;
+        text-decoration: none;
+        color: black;
+        border-radius: 3px;
+    }
+</style>
 </head>
 <body>
-    <?php echo $columna; ?>
-    <?php echo $fila; ?>
-    <h1>Tablero juego super rol DWES</h1>
-    <div class="contenedorTablero">
-        <?php echo $tableroMarkup; ?>
-    </div>
+<h1>Tablero Juego Super Rol DWES</h1>
 
-    <div>
-        <form>
-            <button type="submit" name="boton" value="arriba">↑</button>
-    </form>
+<div class="contenedorTablero">
+    <?php echo $tableroMarkup; ?>
+</div>
 
-    <a href=""></a>
-    <form>
-        <button type="submit" name="boton" value="arriba">↓</button>
-    </form>
-    <form>
-        <button type="submit" name="boton" value="arriba">←</button>
-    </form>
-    <form>
-        <button type="submit" name="boton" value="arriba">→</button>
-    </form>           
-        
-    </div>
+<?php echo $botones; ?>
+
 </body>
 </html>
