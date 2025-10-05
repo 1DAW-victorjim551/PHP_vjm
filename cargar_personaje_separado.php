@@ -42,7 +42,24 @@ function getTableroMArkup ($tablero, $arrayRana){
 
 $fila = $_GET['fila'] ?? 0;
 $columna = $_GET['columna'] ?? 0;
-$boton = "";
+$boton = array(
+    "izquierda" => array(
+        $columna = $columna,
+        $fila = $fila - 1;
+    )
+  "derecha" => array(
+    $columna = $columna,
+    $fila = $fila + 1; 
+  )
+  "arriba" => array(
+    $columna = $columna + 1,
+    $fila = $fila;
+  )
+  "abajo" => array(
+    $columna = $columna - 1,
+    $fila = $fila;
+  )  
+);
 function generarPersonaje(){
     // <-- MODIFICACIÓN: accedemos a $_GET solo si existe, usando null coalescing
 
@@ -55,24 +72,8 @@ function generarPersonaje(){
     return $arrayRana;
 }
 
-function moverPersonaje(){
-    switch($boton){
-        case 'izquierda':
-            $fila--;
-        break;
-
-        case 'derecha':
-            $fila++;
-            break;
-        
-        case 'arriba':
-            $columna++;
-            break;
-
-        case 'abajo':
-            $columna--;
-            break;
-    }
+function botonesMarkup(){
+    <a href=>
 }
 
 function leerArchivoCSV($archivoCSV) {
@@ -145,5 +146,6 @@ $tableroMarkup = getTableroMArkup($tablero, $arrayRana);
     <div class="contenedorTablero">
         <?php echo $tableroMarkup; ?>
     </div>
+
 </body>
 </html>
