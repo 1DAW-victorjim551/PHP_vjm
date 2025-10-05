@@ -64,9 +64,44 @@ function leerInput(){
 }
 //*****Lógica de negocio***********
 //Extracción de las variables de la petición
+$boton = $_GET["boton"];
 
+
+function moverPersonaje($boton, $posPersonaje){
+
+    $col = $posPersonaje['col'];
+    $row = $posPersonaje['row'];
+    switch($boton){
+        case 'izquierda':
+            $row--;
+        break;
+
+        case 'derecha':
+            $row++;
+            break;
+        
+        case 'arriba':
+            $col++;
+            break;
+
+        case 'abajo':
+            $col--;
+            break;
+    }
+
+    return array(
+        'col' => $col,
+        'row' => $row
+    );
+}
 
 $posPersonaje = leerInput();
+
+if (isset($_GET['boton'])) {
+    $boton = $_GET['boton'];
+    $posPersonaje = moverPersonaje($boton, $posPersonaje);
+}
+
 
 dump('$posPersonaje');
 dump($posPersonaje);
@@ -76,8 +111,10 @@ $tablero = leerArchivoCSV('./data/tablero1.csv');
 
 //*****+++Lógica de presentación*******
 $tableroMarkup = getTableroMarkup($tablero, $posPersonaje);
+
 $columna = $col;
 $fila = $row;
+
 
 
 ?>
@@ -139,10 +176,20 @@ $fila = $row;
     </div>
 
     <div>
-        <a href="#">↑</a>
-        <a href="#">↓</a>
-        <a href="#">←</a>
-        <a href="#">→</a>
+        <form>
+            <button type="submit" name="boton" value="arriba">↑</button>
+    </form>
+
+    <a href=""></a>
+    <form>
+        <button type="submit" name="boton" value="arriba">↓</button>
+    </form>
+    <form>
+        <button type="submit" name="boton" value="arriba">←</button>
+    </form>
+    <form>
+        <button type="submit" name="boton" value="arriba">→</button>
+    </form>           
         
     </div>
 </body>
