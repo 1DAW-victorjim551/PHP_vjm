@@ -30,28 +30,46 @@ function getTableroMArkup($tablero, $arrayRana){
     return $output;
 }
 
-/* Función que generas tus cuentas de rana */
+
 function generarPersonaje(){
     global $fila, $columna;
-    $random = $fila * $columna; // <-- tus cuentas originales
+    $random = $fila * $columna;
     $rana = '<img src="./media/froggit.webp" style="width:20px;height:20px;display:inline-block">';
-    return [$random => $rana];
+    $arrayRana = array(
+        $random => $rana
+    );
+
+    return $arrayRana;
 }
 
 /* Función para generar los botones */
-function botonesMarkup($fila, $columna){
+function botonesMarkup($columna, $fila){
     $boton = array(
-        "izquierda" => array($fila, $columna - 1),
-        "derecha"   => array($fila, $columna + 1),
-        "arriba"    => array($fila - 1, $columna),
-        "abajo"     => array($fila + 1, $columna)
+      "izquierda" => array(
+        $columna = $columna,
+        $fila = $fila - 1
+      ),
+      "derecha" => array(
+        $columna = $columna,
+        $fila = $fila + 1 
+      ),
+      "arriba" => array(
+        $columna = $columna + 1,
+        $fila = $fila
+      ),
+      "abajo" => array(
+        $columna = $columna - 1,
+        $fila = $fila
+      )  
     );
 
     $markup = '<div class="botones">';
     foreach ($boton as $dir => $pos) {
-        list($f, $c) = $pos;
-        $markup .= '<a href="./index.php?fila='.$f.'&columna='.$c.'">'.$dir.'</a> ';
+        list($c, $f) = $pos;
+        $markup .= '<a href="./index.php?columna='.$c.'&fila='.$f.'">'.$dir.'</a> ';
     }
+    dump($columna);
+    dump($fila);
     $markup .= '</div>';
 
     return $markup;
@@ -80,7 +98,7 @@ $tablero = leerArchivoCSV('media/divs_php.csv');
 $arrayRana = generarPersonaje();
 
 /* Generación de botones */
-$botones = botonesMarkup($fila, $columna);
+$botones = botonesMarkup($columna, $fila);
 
 /* Generación del markup del tablero */
 $tableroMarkup = getTableroMArkup($tablero, $arrayRana);
