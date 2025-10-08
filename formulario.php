@@ -22,7 +22,7 @@ if (isset($edad)){
 <body>
   <h2>Formulario de nombre y edad</h2>
 
-  <form method="get">
+  <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="get">
     <label for="nombre">Nombre:</label>
     <input type="text" id="nombre" name="nombre" value="<?php echo htmlspecialchars($nombre); ?>">
     <br><br>
