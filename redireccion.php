@@ -44,12 +44,12 @@ function generarPersonaje(){
 }
 
 function procesarRedirect(){
-    if(!isset($_GET='[columna]') || !isset($_GET='[fila]')){
-        header("HTTP/1.1 302 Moved Temporarily");
+    if (!isset($_GET['columna']) || !isset($_GET['fila'])) {
         header("Location: ./index.php?columna=0&fila=0");
-        die();
+        exit;
     }
 }
+
 
 /* Función para generar los botones */
 function botonesMarkup($columna, $fila){
