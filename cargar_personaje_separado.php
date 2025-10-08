@@ -5,14 +5,13 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-/* Zona de declaración de funciones */
-//Funciones de debugueo
+/* Funciones de debug */
 function dump($var){
     echo '<pre>'.print_r($var,1).'</pre>';
 }
 
-//Función lógica presentación
-function getTableroMArkup ($tablero, $arrayRana){
+/* Función para pintar el tablero con la rana */
+function getTableroMArkup($tablero, $arrayRana){
     $output = '';
     $cont = 0;
 
@@ -31,39 +30,10 @@ function getTableroMArkup ($tablero, $arrayRana){
     return $output;
 }
 
-//Lógica de negocio
-//El tablero es un array bidimensional en el que cada fila contiene 12 palabras cuyos valores pueden ser:
-// agua
-// fuego
-// tierra
-// hierba
 
-
-
-$fila = $_GET['fila'] ?? 0;
-$columna = $_GET['columna'] ?? 0;
-$boton = array(
-    "izquierda" => array(
-        $columna = $columna,
-        $fila = $fila - 1;
-    )
-  "derecha" => array(
-    $columna = $columna,
-    $fila = $fila + 1; 
-  )
-  "arriba" => array(
-    $columna = $columna + 1,
-    $fila = $fila;
-  )
-  "abajo" => array(
-    $columna = $columna - 1,
-    $fila = $fila;
-  )  
-);
 function generarPersonaje(){
-    // <-- MODIFICACIÓN: accedemos a $_GET solo si existe, usando null coalescing
-
-    $random = $fila * $columna;
+    global $fila, $columna;
+    $random = ($columna * 12) + $fila;
     $rana = '<img src="./media/froggit.webp" style="width:20px;height:20px;display:inline-block">';
     $arrayRana = array(
         $random => $rana
@@ -72,80 +42,113 @@ function generarPersonaje(){
     return $arrayRana;
 }
 
-function botonesMarkup(){
-    <a href=>
+/* Función para generar los botones */
+function botonesMarkup($columna, $fila){
+    $boton = array(
+      "izquierda" => array(
+        $columna,
+        $fila - 1
+      ),
+      "derecha" => array(
+        $columna,
+        $fila + 1
+      ),
+      "arriba" => array(
+        $columna - 1,
+        $fila
+      ),
+      "abajo" => array(
+        $columna + 1,
+        $fila
+      )  
+    );
+
+    $markup = '<div class="botones">';
+    foreach ($boton as $dir => $pos) {
+        list($c, $f) = $pos;
+        $markup .= '<a href="./index.php?columna='.$c.'&fila='.$f.'">'.$dir.'</a> ';
+    }
+    dump($columna);
+    dump($fila);
+    $markup .= '</div>';
+
+    return $markup;
 }
 
-function leerArchivoCSV($archivoCSV) {
+/* Función para leer el CSV del tablero */
+function leerArchivoCSV($archivoCSV){
     $tablero = [];
-
     if (($puntero = fopen($archivoCSV, "r")) !== FALSE) {
-        while (($datosFila = fgetcsv($puntero)) !== FALSE) {
-            $tablero[] = $datosFila;
+        while (($filaCSV = fgetcsv($puntero)) !== FALSE) {
+            $tablero[] = $filaCSV;
         }
         fclose($puntero);
     }
-
     return $tablero;
 }
 
+/* Valores de fila y columna desde GET */
+$fila = $_GET['fila'] ?? 0;
+$columna = $_GET['columna'] ?? 0;
+
+/* Lectura del tablero */
 $tablero = leerArchivoCSV('media/divs_php.csv');
+
+/* Generación de la rana */
 $arrayRana = generarPersonaje();
 
-//Lógica de presentación
+/* Generación del markup del tablero */
 $tableroMarkup = getTableroMArkup($tablero, $arrayRana);
 
+/* Generación de botones */
+$botones = botonesMarkup($columna, $fila);
+
 ?>
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <style>
-        .contenedorTablero {
-            width: 600px;
-            height: 600px;
-            border-radius: 5px;
-            border: solid 2px grey;
-            box-shadow: grey;
-            grid-template-columns: repeat(12, 1fr);
-            grid-template-rows: repeat(12, 1fr);
-            display: grid; /* activa el sistema de cuadrícula (grid layout) para organizar las casillas */
-        }
-        .tile {
-            width: 50px;
-            height: 50px;
-            float: left;
-            margin: 0;
-            padding: 0;
-            border-width: 0;
-            background-image: url('./media/464.jpg');
-            background-size: 206px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .fuego {
-            background-color: red;
-            background-position: -103px -52px;
-        }
-        .tierra {
-            background-color: brown;
-        }
-        .agua {
-            background-color: blue;
-        }
-        .hierba {
-            background-color: green;
-        }
-    </style>
+<meta charset="UTF-8">
+<title>Tablero Juego Super Rol DWES</title>
+<style>
+    .contenedorTablero {
+        width: 600px;
+        height: 600px;
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        grid-template-rows: repeat(12, 1fr);
+        border: 2px solid grey;
+    }
+    .tile {
+        width: 50px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #ccc;
+    }
+    .fuego { background-color: red; }
+    .tierra { background-color: brown; }
+    .agua { background-color: blue; }
+    .hierba { background-color: green; }
+    .botones a {
+        margin: 5px;
+        padding: 5px 10px;
+        background: #ccc;
+        text-decoration: none;
+        color: black;
+        border-radius: 3px;
+    }
+</style>
 </head>
 <body>
-    <h1>Tablero juego super rol DWES</h1>
-    <div class="contenedorTablero">
-        <?php echo $tableroMarkup; ?>
-    </div>
+<h1>Tablero Juego Super Rol DWES</h1>
+
+<div class="contenedorTablero">
+    <?php echo $tableroMarkup; ?>
+</div>
+
+<?php echo $botones; ?>
 
 </body>
 </html>

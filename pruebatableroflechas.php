@@ -33,7 +33,7 @@ function getTableroMArkup($tablero, $arrayRana){
 
 function generarPersonaje(){
     global $fila, $columna;
-    $random = $fila * $columna;
+    $random = ($columna * 12) + $fila;
     $rana = '<img src="./media/froggit.webp" style="width:20px;height:20px;display:inline-block">';
     $arrayRana = array(
         $random => $rana
@@ -46,20 +46,20 @@ function generarPersonaje(){
 function botonesMarkup($columna, $fila){
     $boton = array(
       "izquierda" => array(
-        $columna = $columna,
-        $fila = $fila - 1
+        $columna,
+        $fila - 1
       ),
       "derecha" => array(
-        $columna = $columna,
-        $fila = $fila + 1 
+        $columna,
+        $fila + 1
       ),
       "arriba" => array(
-        $columna = $columna + 1,
-        $fila = $fila
+        $columna - 1,
+        $fila
       ),
       "abajo" => array(
-        $columna = $columna - 1,
-        $fila = $fila
+        $columna + 1,
+        $fila
       )  
     );
 
@@ -97,11 +97,11 @@ $tablero = leerArchivoCSV('media/divs_php.csv');
 /* Generación de la rana */
 $arrayRana = generarPersonaje();
 
-/* Generación de botones */
-$botones = botonesMarkup($columna, $fila);
-
 /* Generación del markup del tablero */
 $tableroMarkup = getTableroMArkup($tablero, $arrayRana);
+
+/* Generación de botones */
+$botones = botonesMarkup($columna, $fila);
 
 ?>
 
