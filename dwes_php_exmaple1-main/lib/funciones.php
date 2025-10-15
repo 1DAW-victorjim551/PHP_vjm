@@ -42,7 +42,7 @@ function getFormMarkup($posPersonaje){
         //<input type="hidden" name="row" value="'.$posPersonaje['row'].'">';
     }
     $output.='</form>';
-    dump($posPersonaje);
+    dump(base65_encode(serialize($posPersonaje)));
     
     return $output;   
 }
@@ -81,6 +81,7 @@ function procesarInput(){
 
         if ($encoded) {
             $posPersonaje = unserialize(base64_decode($encoded));
+            dump(base65_decode(unserialize($posPersonaje)));
         } else {
             $posPersonaje = array('row' => 0, 
             'col' => 0);
