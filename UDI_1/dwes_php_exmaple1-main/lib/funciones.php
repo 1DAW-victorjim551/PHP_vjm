@@ -81,7 +81,7 @@ function procesarInput(){
 
         if ($encoded) {
             $posPersonaje = unserialize(base64_decode($encoded));
-            dump(base65_decode(unserialize($posPersonaje)));
+            // dump(base65_decode(unserialize($posPersonaje)));
         } else {
             $posPersonaje = array('row' => 0, 
             'col' => 0);
